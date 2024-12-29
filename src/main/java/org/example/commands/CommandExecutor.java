@@ -1,27 +1,27 @@
 package org.example.commands;
 
+import javax.annotation.Nonnull;
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.function.Predicate;
 
-public abstract class Command {
+public abstract class CommandExecutor {
 
     public abstract String getName();
 
-    public boolean checkNamesMatch(String[] args) {
+    public boolean checkNamesMatch(@Nonnull String[] args) {
         var name = getName();
         return args.length != 0 && (args[0].equals(name) || args[0].equals('-' + name));
     }
 
-    public Optional<BigDecimal> tryExecute(String[] args) {
+    public CommandResult tryExecute(@Nonnull String[] args) {
         if (checkNamesMatch(args)) {
             return tryExecute2(Arrays.copyOfRange(args, 1, args.length));
         }
-        return Optional.empty();
+        return new CommandResult(new Exception("invalid name"));
     }
 
-    public Optional<BigDecimal> tryExecute2(String[] args) {
+    public CommandResult tryExecute2(@Nonnull String[] args) {
         if (args.length != 0 && (args[0].equals("odd"))) {
             return tryExecute3((x) -> !(x.toBigInteger().testBit(0)), Arrays.copyOfRange(args, 1, args.length));
         }
@@ -31,5 +31,6 @@ public abstract class Command {
         return tryExecute3((_) -> true, args);
     }
 
-    public abstract Optional<BigDecimal> tryExecute3(Predicate<BigDecimal> condition, String[] args);
+    public abstract CommandResult tryExecute3(
+            @Nonnull Predicate<BigDecimal> condition, @Nonnull String[] args);
 }

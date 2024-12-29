@@ -3,25 +3,23 @@ package org.example.commands;
 import org.reflections.Reflections;
 
 import java.lang.reflect.InvocationTargetException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public class CommandsList {
 
-    public static List<Command> commandsList;
+    public static List<CommandExecutor> commandsList;
 
     static {
         var reflections = new Reflections("org.example");
-        ArrayList<Class<? extends Command>> commandTypes = new ArrayList<>();
-        for (var c : reflections.getSubTypesOf(Command.class)) {
+        ArrayList<Class<? extends CommandExecutor>> commandTypes = new ArrayList<>();
+        for (var c : reflections.getSubTypesOf(CommandExecutor.class)) {
             commandTypes.addAll(
                     reflections.getSubTypesOf(c));
         }
 
-        List<Command> commands = new ArrayList<>();
+        List<CommandExecutor> commands = new ArrayList<>();
         for (var commandType : commandTypes) {
             try {
                 var constructor = commandType.getDeclaredConstructor();
@@ -35,14 +33,13 @@ public class CommandsList {
         commandsList = Collections.unmodifiableList(commands);
     }
 
-    public static Optional<BigDecimal> tryExecute(String[] args) {
+    public static CommandResult tryExecute(String[] args) {
         for (var command : commandsList) {
-            var result = command.tryExecute(args);
-            if (result.isPresent()) {
-                return result;
+            if (command.checkNamesMatch(args)) {
+                return command.tryExecute(args);
             }
         }
-        return Optional.empty();
+        return new CommandResult(new Exception("не найдено"));
     }
 
 }
