@@ -1,5 +1,10 @@
+import org.example.Main;
 import org.junit.Test;
 import static org.junit.Assert.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.math.BigDecimal;
 import static org.example.commands.CommandExecutor.tryExecute;
 
@@ -40,5 +45,14 @@ public class Tests {
     public void divTest() {
         assertCommandResult("-165443.818709563", "div 67898788 33 21984.235 -0.0005657");
     }
-//test i/o
+
+    @Test
+    public void inputOutputTest() {
+        Main.inputStream =new ByteArrayInputStream("add 3 6 7 \n div 99898.7 778786665.55 \n".getBytes());
+        var output =new  ByteArrayOutputStream();
+        Main.outputStream =new PrintStream(output) ;
+        Main.main(new String[0]);
+        assertEquals("16\r\n0.000128275\r\n", output.toString());
+    }
+
 }

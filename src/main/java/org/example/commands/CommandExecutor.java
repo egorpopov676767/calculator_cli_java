@@ -7,7 +7,7 @@ import org.example.operations.other.operations.HelpOperation;
 public abstract class CommandExecutor {
 
     public static CommandResult tryExecute(String string) {
-        return tryExecute(string.split("\\s+"));
+        return tryExecute(string.trim().split("\\s+"));
     }
 
     public static CommandResult tryExecute(String[] args) {

@@ -22,7 +22,7 @@ public class Command {
     BigDecimal[] values;
 
     public Command(String string) throws Exception {
-        this(string.split("\\s+"));
+        this(string.trim().split("\\s+"));
     }
 
     public Command(String[] args) throws Exception {
