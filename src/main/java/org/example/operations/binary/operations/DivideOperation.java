@@ -1,6 +1,8 @@
 package org.example.operations.binary.operations;
 
 import org.example.commands.CommandResult;
+import org.example.commands.ExceptionResult;
+import org.example.commands.NumberResult;
 import org.example.operations.binary.BinaryOperation;
 
 import javax.annotation.Nonnull;
@@ -21,10 +23,10 @@ public class DivideOperation extends BinaryOperation {
     @Override
     public CommandResult operation(@Nonnull BigDecimal a, @Nonnull BigDecimal b) {
         try {
-            return new CommandResult(
+            return new NumberResult(
                     a.divide(b, 9, BigDecimal.ROUND_HALF_UP));
         } catch (ArithmeticException e) {
-            return new CommandResult(
+            return new ExceptionResult(
                     new Exception("деление на ноль"));
         }
     }

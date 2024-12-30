@@ -15,13 +15,13 @@ public class Main {
     public static void main(String[] args) {
         if (args.length != 0) {
             var result = tryExecute(args);
-            result.print();
+            outputStream.println(result);
         } else {
             var scanner = new Scanner(inputStream);
             String inputLine;
             while (scanner.hasNextLine() && !Objects.equals(inputLine = scanner.nextLine(), "quit")) {
                 var result = tryExecute(inputLine);
-                outputStream.println(result.get());
+                outputStream.println(result);
             }
         }
     }

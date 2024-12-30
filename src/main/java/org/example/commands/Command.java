@@ -1,6 +1,7 @@
 package org.example.commands;
 
 import org.example.operations.Operation;
+import org.example.operations.binary.BinaryOperation;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -46,9 +47,13 @@ public class Command {
             condition = (_) -> true;
         }
 
-        var values = new BigDecimal[args.length - i];
+        var valuesCount = args.length - i;
+        if(operation instanceof BinaryOperation && valuesCount < 1) {
+            throw new Exception("должен быть хотя бы один аргумент");
+        }
+        var values = new BigDecimal[valuesCount];
         var i2 = 0;
-        for (; i < args.length; i++, i2++) {
+        for (; i2<valuesCount; i++, i2++) {
             try {
                 values[i2] = new BigDecimal(args[i]);
             } catch (NumberFormatException e) {

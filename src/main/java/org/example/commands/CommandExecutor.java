@@ -4,6 +4,8 @@ import org.example.operations.binary.BinaryOperation;
 import org.example.operations.other.OtherOperation;
 import org.example.operations.other.operations.HelpOperation;
 
+import java.math.BigDecimal;
+
 public abstract class CommandExecutor {
 
     public static CommandResult tryExecute(String string) {
@@ -14,7 +16,7 @@ public abstract class CommandExecutor {
         try {
             return tryExecute(new Command(args));
         } catch (Exception e) {
-            return new CommandResult<>(e);
+            return new ExceptionResult(e);
         }
     }
 
@@ -23,25 +25,34 @@ public abstract class CommandExecutor {
         var operation = command.operation;
         var condition = command.condition;
         var values = command.values;
-        if (operation instanceof BinaryOperation binaryOperation) {
-            var res = values[0];
-            for (var i = 1; i < values.length; i++) {
-                if (condition.test(values[i])) {
-                    var o = binaryOperation.operation(res, values[i]);
-                    if (o.isPresent()) {
-                        res = o.getResult();
-                    } else {
-                        return o;
+        switch (operation) {
+            case BinaryOperation binaryOperation:
+                var res = values[0];
+                for (var i = 1; i < values.length; i++) {
+                    if (condition.test(values[i])) {
+                        var o = binaryOperation.operation(res, values[i]);
+                        switch (o){
+                            case NumberResult numberResult:
+                                res = numberResult.getResult();
+                                break;
+                            case ExceptionResult exceptionResult:
+                                return exceptionResult;
+                            default:
+                                throw new IllegalStateException();
+                        }
                     }
                 }
-            }
-            return new CommandResult<>(res);
-        } else if (operation instanceof OtherOperation otherOperation) {
-            if (otherOperation instanceof HelpOperation helpOperation) {
-                return new CommandResult<>(helpOperation.getHelp());
-            }
+                return new NumberResult(res);
+            case OtherOperation otherOperation:
+                switch (otherOperation) {
+                    case HelpOperation helpOperation:
+                        return new StringResult(helpOperation.getHelp());
+                    default:
+                        throw new IllegalStateException();
+                }
+            default:
+                return new ExceptionResult(new Exception());
         }
-        return new CommandResult<>(new Exception());
     }
 
 }
