@@ -1,28 +1,44 @@
-import org.example.Main;
-import org.example.commands.CommandResult;
-import org.example.commands.CommandsList;
-import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.math.BigDecimal;
-
 import static org.junit.Assert.*;
+import java.math.BigDecimal;
+import static org.example.commands.CommandExecutor.tryExecute;
 
 public class Tests {
 
     public void assertCommandResult(BigDecimal expected, String command) {
         assertEquals(
                 expected,
-                CommandsList.tryExecute(command.split("\\s+")).get());
+                tryExecute(command.split("\\s+")).get());
     }
 
     public void assertCommandResult(int expected, String command) {
-        assertCommandResult(BigDecimal.valueOf(expected), command);
+        assertCommandResult(new BigDecimal(expected), command);
+    }
+
+    public void assertCommandResult(String expected, String command) {
+        assertCommandResult(new BigDecimal(expected), command);
     }
 
     @Test
-    public void test1() {
-        assertCommandResult(8, "add 1 5 2");
+    public void addTest() {
+        assertCommandResult(4, "add 1 5 -2");
     }
 
+    @Test
+    public void subTest() {
+        assertCommandResult("18.1", "sub 99 6 -5 79.9");
+    }
+
+    @Test
+    public void mulTest() {
+        assertCommandResult(
+                "-346354142471624248012203204.85970181892785952555658011985986399520",
+                "mul 1436264.685865 -5214.85688 46242734758738838.928235235283568863496999996");
+    }
+
+    @Test
+    public void divTest() {
+        assertCommandResult("-165443.818709563", "div 67898788 33 21984.235 -0.0005657");
+    }
+//test i/o
 }

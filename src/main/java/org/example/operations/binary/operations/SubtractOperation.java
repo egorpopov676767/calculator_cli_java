@@ -1,17 +1,21 @@
-package org.example.commands.binary.commands;
+package org.example.operations.binary.operations;
 
 import org.example.commands.CommandResult;
-import org.example.commands.binary.BinaryOperationExecutor;
+import org.example.operations.binary.BinaryOperation;
 
 import javax.annotation.Nonnull;
 import java.math.BigDecimal;
-import java.util.Optional;
 
-public class SubtractExecutor extends BinaryOperationExecutor {
+public class SubtractOperation extends BinaryOperation {
 
     @Override
     public String getName() {
         return "sub";
+    }
+
+    @Override
+    public String getDescription() {
+        return "вычитает из первого числа все последующие";
     }
 
     @Override

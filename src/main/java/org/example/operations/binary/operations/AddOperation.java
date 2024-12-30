@@ -1,13 +1,11 @@
-package org.example.commands.binary.commands;
+package org.example.operations.binary.operations;
 
 import org.example.commands.CommandResult;
-import org.example.commands.binary.BinaryOperationExecutor;
-
+import org.example.operations.binary.BinaryOperation;
 import javax.annotation.Nonnull;
 import java.math.BigDecimal;
-import java.util.Optional;
 
-public class AddExecutor extends BinaryOperationExecutor {
+public class AddOperation extends BinaryOperation {
 
     @Override
     public String getName() {
@@ -15,8 +13,14 @@ public class AddExecutor extends BinaryOperationExecutor {
     }
 
     @Override
+    public String getDescription() {
+        return "суммирует числа";
+    }
+
+    @Override
     public CommandResult operation(@Nonnull BigDecimal a, @Nonnull BigDecimal b) {
         return new CommandResult(
                 a.add(b));
     }
+
 }

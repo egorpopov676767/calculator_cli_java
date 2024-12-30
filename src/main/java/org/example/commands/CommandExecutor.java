@@ -1,36 +1,47 @@
 package org.example.commands;
 
-import javax.annotation.Nonnull;
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.function.Predicate;
+import org.example.operations.binary.BinaryOperation;
+import org.example.operations.other.OtherOperation;
+import org.example.operations.other.operations.HelpOperation;
 
 public abstract class CommandExecutor {
 
-    public abstract String getName();
-
-    public boolean checkNamesMatch(@Nonnull String[] args) {
-        var name = getName();
-        return args.length != 0 && (args[0].equals(name) || args[0].equals('-' + name));
+    public static CommandResult tryExecute(String string) {
+        return tryExecute(string.split("\\s+"));
     }
 
-    public CommandResult tryExecute(@Nonnull String[] args) {
-        if (checkNamesMatch(args)) {
-            return tryExecute2(Arrays.copyOfRange(args, 1, args.length));
+    public static CommandResult tryExecute(String[] args) {
+        try {
+            return tryExecute(new Command(args));
+        } catch (Exception e) {
+            return new CommandResult<>(e);
         }
-        return new CommandResult(new Exception("invalid name"));
     }
 
-    public CommandResult tryExecute2(@Nonnull String[] args) {
-        if (args.length != 0 && (args[0].equals("odd"))) {
-            return tryExecute3((x) -> !(x.toBigInteger().testBit(0)), Arrays.copyOfRange(args, 1, args.length));
+    public static CommandResult tryExecute(
+            Command command) {
+        var operation = command.operation;
+        var condition = command.condition;
+        var values = command.values;
+        if (operation instanceof BinaryOperation binaryOperation) {
+            var res = values[0];
+            for (var i = 1; i < values.length; i++) {
+                if (condition.test(values[i])) {
+                    var o = binaryOperation.operation(res, values[i]);
+                    if (o.isPresent()) {
+                        res = o.getResult();
+                    } else {
+                        return o;
+                    }
+                }
+            }
+            return new CommandResult<>(res);
+        } else if (operation instanceof OtherOperation otherOperation) {
+            if (otherOperation instanceof HelpOperation helpOperation) {
+                return new CommandResult<>(helpOperation.getHelp());
+            }
         }
-        if (args.length != 0 && (args[0].equals("even"))) {
-            return tryExecute3((x) -> (x.toBigInteger().testBit(0)), Arrays.copyOfRange(args, 1, args.length));
-        }
-        return tryExecute3((_) -> true, args);
+        return new CommandResult<>(new Exception());
     }
 
-    public abstract CommandResult tryExecute3(
-            @Nonnull Predicate<BigDecimal> condition, @Nonnull String[] args);
 }
