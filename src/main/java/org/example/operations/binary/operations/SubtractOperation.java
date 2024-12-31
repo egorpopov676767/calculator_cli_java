@@ -2,12 +2,11 @@ package org.example.operations.binary.operations;
 
 import org.example.commands.CommandResult;
 import org.example.commands.NumberResult;
-import org.example.operations.binary.BinaryOperation;
-
+import org.example.operations.binary.BinaryCumulativeOperation;
 import javax.annotation.Nonnull;
 import java.math.BigDecimal;
 
-public class SubtractOperation extends BinaryOperation {
+public class SubtractOperation extends BinaryCumulativeOperation {
 
     @Override
     public String getName() {

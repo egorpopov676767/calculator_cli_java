@@ -9,7 +9,7 @@ import java.io.PrintStream;
 import java.math.BigDecimal;
 import static org.example.commands.CommandExecutor.tryExecute;
 
-public class Tests {
+public class CalculatorTests {
 
     public void assertExecutionResult(BigDecimal expected, String command) {
         var commandResult = tryExecute(command.split("\\s+"));
@@ -55,13 +55,25 @@ public class Tests {
     }
 
     @Test
-    public void noValues() {
-        assertException("sub");
+    public void sqrtTest() {
+        assertExecutionResult("7.53525049", "sqrt 56.78");
+        assertException("sqrt -2");
     }
 
     @Test
-    public void wrongValues() {
+    public void powTest() {
+        assertExecutionResult("6.249163873572453E+41", "pow 3 87.6");
+        assertException("pow -89.9 1.3");
+        assertException("pow 0 -1");
+    }
+
+    @Test
+    public void wrongArgs() {
+        assertException("sub");
         assertException("sub 90 7 8.9 b d");
+        assertException("sqrt 45 67");
+        assertException("pow 7.9");
+        assertException("pow 7.9 12.3 5");
     }
 
     @Test

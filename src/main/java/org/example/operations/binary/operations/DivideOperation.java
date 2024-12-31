@@ -3,12 +3,12 @@ package org.example.operations.binary.operations;
 import org.example.commands.CommandResult;
 import org.example.commands.ExceptionResult;
 import org.example.commands.NumberResult;
-import org.example.operations.binary.BinaryOperation;
+import org.example.operations.binary.BinaryCumulativeOperation;
 
 import javax.annotation.Nonnull;
 import java.math.BigDecimal;
 
-public class DivideOperation extends BinaryOperation {
+public class DivideOperation extends BinaryCumulativeOperation {
 
     @Override
     public String getName() {

@@ -1,10 +1,10 @@
 package org.example.commands;
 
-import org.example.operations.binary.BinaryOperation;
+import org.example.operations.binary.BinaryCumulativeOperation;
+import org.example.operations.binary.BinaryNonCumulativeOperation;
 import org.example.operations.other.OtherOperation;
 import org.example.operations.other.operations.HelpOperation;
-
-import java.math.BigDecimal;
+import org.example.operations.unary.UnaryOperation;
 
 public abstract class CommandExecutor {
 
@@ -23,26 +23,28 @@ public abstract class CommandExecutor {
     public static CommandResult tryExecute(
             Command command) {
         var operation = command.operation;
-        var condition = command.condition;
         var values = command.values;
         switch (operation) {
-            case BinaryOperation binaryOperation:
+            case UnaryOperation unaryOperation:
+                var value = values[0];
+                return unaryOperation.operation(value);
+            case BinaryCumulativeOperation binaryCumulativeOperation:
                 var res = values[0];
                 for (var i = 1; i < values.length; i++) {
-                    if (condition.test(values[i])) {
-                        var o = binaryOperation.operation(res, values[i]);
-                        switch (o){
-                            case NumberResult numberResult:
-                                res = numberResult.getResult();
-                                break;
-                            case ExceptionResult exceptionResult:
-                                return exceptionResult;
-                            default:
-                                throw new IllegalStateException();
-                        }
+                    var o = binaryCumulativeOperation.operation(res, values[i]);
+                    switch (o) {
+                        case NumberResult numberResult:
+                            res = numberResult.getResult();
+                            break;
+                        case ExceptionResult exceptionResult:
+                            return exceptionResult;
+                        default:
+                            throw new IllegalStateException();
                     }
                 }
                 return new NumberResult(res);
+            case BinaryNonCumulativeOperation binaryNonCumulativeOperation:
+                return binaryNonCumulativeOperation.operation(values[0], values[1]);
             case OtherOperation otherOperation:
                 switch (otherOperation) {
                     case HelpOperation helpOperation:
@@ -51,7 +53,7 @@ public abstract class CommandExecutor {
                         throw new IllegalStateException();
                 }
             default:
-                return new ExceptionResult(new Exception());
+                throw new IllegalStateException();
         }
     }
 
