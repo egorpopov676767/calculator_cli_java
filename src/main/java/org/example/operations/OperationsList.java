@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Статический класс, извлекающий список доступных операций через рефлексию
+ */
 public class OperationsList {
 
     public static List<Operation> operationsList;
@@ -33,6 +36,9 @@ public class OperationsList {
         }
 
         operationsList = Collections.unmodifiableList(operations);
+    }
+
+    private OperationsList() {
     }
 
 }

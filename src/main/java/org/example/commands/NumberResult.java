@@ -3,6 +3,9 @@ package org.example.commands;
 import javax.annotation.Nonnull;
 import java.math.BigDecimal;
 
+/**
+ * Базовый абстрактный класс, обозначающий число, полученное в результате выполнения команды
+ */
 public class NumberResult extends CommandResult {
 
     @Nonnull

@@ -11,6 +11,9 @@ import java.math.BigDecimal;
 import static java.text.MessageFormat.format;
 import static org.example.operations.OperationsList.operationsList;
 
+/**
+ * Базовый абстрактный класс, обозначающий команду
+ */
 public class Command {
 
     @Nonnull

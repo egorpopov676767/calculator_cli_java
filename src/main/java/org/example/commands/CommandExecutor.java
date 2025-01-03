@@ -6,7 +6,10 @@ import org.example.operations.other.OtherOperation;
 import org.example.operations.other.operations.HelpOperation;
 import org.example.operations.unary.UnaryOperation;
 
-public abstract class CommandExecutor {
+/**
+ * Статический класс, принимающий команду и исполняющий её
+ */
+public class CommandExecutor {
 
     public static CommandResult tryExecute(String string) {
         return tryExecute(string.trim().split("\\s+"));
@@ -48,13 +51,16 @@ public abstract class CommandExecutor {
             case OtherOperation otherOperation:
                 switch (otherOperation) {
                     case HelpOperation helpOperation:
-                        return new StringResult(helpOperation.getHelp());
+                        return new TextResult(helpOperation.getHelp());
                     default:
                         throw new IllegalStateException();
                 }
             default:
                 throw new IllegalStateException();
         }
+    }
+
+    private CommandExecutor() {
     }
 
 }

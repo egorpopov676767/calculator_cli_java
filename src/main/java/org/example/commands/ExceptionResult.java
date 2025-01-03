@@ -1,9 +1,11 @@
 package org.example.commands;
 
 import javax.annotation.Nonnull;
-
 import static java.text.MessageFormat.format;
 
+/**
+ * Базовый абстрактный класс, обозначающий ошибку, произошедшую во время выполнения команды
+ */
 public class ExceptionResult extends CommandResult {
 
     @Nonnull

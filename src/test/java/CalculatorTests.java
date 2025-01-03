@@ -11,6 +11,9 @@ import static org.example.commands.CommandExecutor.tryExecute;
 
 public class CalculatorTests {
 
+    /**
+     * Исполняет команду и сверяет результат
+     */
     public void assertExecutionResult(BigDecimal expected, String command) {
         var commandResult = tryExecute(command.split("\\s+"));
         assertTrue(commandResult instanceof NumberResult);
