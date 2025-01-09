@@ -34,8 +34,8 @@ public class CommandExecutor {
             case BinaryCumulativeOperation binaryCumulativeOperation:
                 var res = values[0];
                 for (var i = 1; i < values.length; i++) {
-                    var o = binaryCumulativeOperation.operation(res, values[i]);
-                    switch (o) {
+                    var opResult = binaryCumulativeOperation.operation(res, values[i]);
+                    switch (opResult) {
                         case NumberResult numberResult:
                             res = numberResult.getResult();
                             break;
